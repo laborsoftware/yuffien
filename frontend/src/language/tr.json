@@ -1,0 +1,60 @@
+{
+    "maintenance": {
+        "title": "Bakım Modu",
+        "name": "Bakım Modu",
+        "description": "Sistemi sizin için en iyi hâle getiriyoruz.",
+        "infoMessage": "Yenilik için üzgünüz!"
+    },
+    "home": {
+        "title": "Anasayfa",
+        "name": "Web Tabanlı Discord Botu",
+        "description": "Sunucunuza ekleyerek, sunucunuzu uçurun.",
+        "ticket": "İstek/sorun bildir!",
+        "addToServerBtn": {
+            "name": "Sunucuma ekle",
+            "url": "url"
+        },
+        "loginBtn": {
+            "name": "Discord ile giriş yap",
+            "url": "/auth/redirect"
+        },
+        "panelBtn": {
+            "name": "Panele git",
+            "url": "/dashboard"
+        },
+        "features": {
+            "name": "Yenilikler",
+            "description": "Kaçıramayacağınız Güçlü Özellikler!",
+            "subdescription": "Gelişmiş Discord Botu"
+        },
+        "logoutBtn": {
+            "name": "Çıkış yap"
+        }
+
+
+    },
+    "failed-authorization": {
+        "title": "Başarısız Yetkilendirme",
+        "name": "Ooops!",
+        "description": "İstediğiniz sayfaya ulaşmak için giriş yapmanız gerekmekte.",
+        "goToHome": "Anasayfaya git"
+    },
+    "404": {
+        "title": "Böyle bir sayfa bulunamadı.",
+        "name": "Ooops!",
+        "description": "İstediğiniz sayfa henüz buralarda yok, daha sonra tekrar uğramayı dener misin?",
+        "goToHome": "Anasayfaya git"
+    },
+    "successful": {
+        "title": "Başarılı",
+        "name": "Giriş yaptığınız için teşekkürler!",
+        "description": "Sizin için son güncellemeleri alıyoruz. Bu işlem biraz zaman alabilir.<br>Anlayışınız için teşekkür ederiz!",
+        "autoRedirect": "Eğer tarayıcınız otomatik yönlendirmeyi desteklemiyorsa, <a href='/'>buraya</a> tıklayınız."
+    },
+    "dashboard": {
+        "welcome": {
+            "title": "Kullanıcı Karşılama",
+            "description": "Sunucunuza yeni kişi katıldığında onunla etkileşimde bulunun!"
+        }
+    }
+}

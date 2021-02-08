@@ -5,6 +5,7 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
+const cors = require('cors')
 
 const authRouter = require('./routes/auth')
 const botRouter = require('./routes/bot')
@@ -13,14 +14,8 @@ const commandCategoryRouter = require('./routes/category')
 
 const app = express()
 
-// Add headers
-app.use(function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', process.env.FRONTEND_URL)
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
-    res.setHeader('Access-Control-Allow-Credentials', true)
-    next()
-})
+// cors
+app.use(cors({ credentials: true, origin: process.env.FRONTEND_URL }))
 
 //passport
 const session = require('express-session')
@@ -70,12 +65,13 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development
-    res.locals.message = err.message
-    res.locals.error = req.app.get('env') === 'development' ? err : {}
+    console.log(err)
+        // res.locals.message = err.message
+        // res.locals.error = req.app.get('env') === 'development' ? err : {}
 
-    // render the error page
-    res.status(err.status || 500)
-    res.render('error')
+    // // render the error page
+    // res.status(err.status || 500)
+    // res.render('error')
 })
 
 module.exports = app

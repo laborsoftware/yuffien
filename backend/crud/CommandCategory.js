@@ -1,26 +1,20 @@
-const CommandCategory = require("../models/CommandCategory");
+const CommandCategory = require('../models/CommandCategory')
 
-
-
-module.exports.add = async(category) => {
-
+module.exports.add = async category => {
     // const newCategory = new CommandCategory({
     //     name: "Eğlence",
     //     description: "Birbirinden eğlenceli komutlar burada!"
     // })
 
-    const newCategory = new CommandCategory(category);
+    const newCategory = new CommandCategory(category)
     try {
-        const savedCategory = await newCategory.save();
+        const savedCategory = await newCategory.save()
         if (savedCategory)
-            return ({
+            return {
                 message: `${savedCategory.name} kategorisi başarıyla veritabanına eklendi.`,
-                data: savedCategory
-            })
-
-
+                data: savedCategory,
+            }
     } catch (error) {
         return error.message
     }
-
 }

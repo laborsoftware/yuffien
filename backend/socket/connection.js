@@ -6,17 +6,16 @@ module.exports = (app, server) => {
 
     socketServer = io(server)
     socketServer.on('connection', socket => {
-        console.log("a user connect")
+        console.log('a user connect')
 
-        socket.on("join", id => {
-            socket.join(id);
+        socket.on('join', id => {
+            socket.join(id)
         })
 
-        socket.on("information", (data) => {
-            const id = data._id || data.id;
-            socketServer.to(id).emit("information", data)
+        socket.on('information', data => {
+            const id = data._id || data.id
+            socketServer.to(id).emit('information', data)
         })
-
     })
     return socketServer
 }

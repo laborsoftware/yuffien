@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store/store'
+import store from './store/index'
 import i18n from './language/i18n'
 
 /* DevTools Options */
@@ -71,7 +71,7 @@ const components = [
     Affix
 ]
 
-Vue.prototype.$message = message;
+Vue.prototype.$message = message
 components.forEach(c => Vue.use(c))
 
 Vue.config.productionTip = false
@@ -86,4 +86,4 @@ async function main() {
         render: h => h(App)
     }).$mount('#app')
 }
-main();
+main()

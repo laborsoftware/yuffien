@@ -3,11 +3,10 @@ const mutations = {
     SET_LOADING: 'setLoading',
     SET_GUILD_ID: 'setGuildId',
     SET_GUILD_LOG: 'setGuildLogs'
-};
+}
 
 const getters = {
     GUILD_LOG: 'guildLogs'
-
 }
 
 const event = {
@@ -18,20 +17,20 @@ const event = {
             message: 'loading'
         },
         guildId: null,
-        guildLogs: [],
+        guildLogs: []
     }),
     mutations: {
         [mutations.SET_USER](state, payload) {
-            state.serverID = payload;
+            state.serverID = payload
         },
         [mutations.SET_LOADING](state, payload) {
-            state.loading = payload;
+            state.loading = payload
         },
         [mutations.SET_GUILD_ID](state, payload) {
-            state.guildId = payload;
+            state.guildId = payload
         },
         [mutations.SET_GUILD_LOG](state, payload) {
-            state.guildLogs.push(payload);
+            state.guildLogs.push(payload)
         }
     },
     getters: {
@@ -39,9 +38,6 @@ const event = {
             return state.guildLogs.reverse()
         }
     }
-
-
-
 }
 
-export default event;
+export default event

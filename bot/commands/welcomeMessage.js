@@ -1,24 +1,24 @@
-const MessageEmbed = require("discord.js").MessageEmbed;
+const MessageEmbed = require('discord.js').MessageEmbed
 
 module.exports = {
-    name: "Hoşgeldin Mesajı",
-    aliases: ["hg"],
-    description: "Hoşgeldin Mesajı",
-    icon: "",
-    usage: ``,
+    name: 'Hoşgeldin Mesajı',
+    aliases: ['hg'],
+    description: 'Hoşgeldin Mesajı',
+    icon: '',
+    usage: '',
     active: true,
     website: {
-        active: false
+        active: false,
     },
     maintenance: {
         active: false,
-        name: "Bakım modu",
-        description: "bakım",
+        name: 'Bakım modu',
+        description: 'bakım',
     },
     type: 0,
     createdUser: {
-        nickname: "tolgaand"
+        nickname: 'tolgaand',
     },
-    categoryID: "601ed99850cd0f362c2f3dc7",
+    categoryID: '601ed99850cd0f362c2f3dc7',
     async execute() {},
-};
+}

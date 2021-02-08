@@ -1,73 +1,61 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
 /* views */
-import Home from './views/home/Home.vue';
-import Dashboard from './views/dashboard/Dashboard.vue';
-import Maintenance from './views/other/Maintenance.vue';
-import Fail from './views/other/404.vue';
-import FailedAuth from './views/other/FailedAuth.vue';
+import Home from './views/Home'
+import Dashboard from './views/dashboard/Dashboard'
+import Maintenance from './views/Maintenance.vue'
+import Fail from './views/404.vue'
+import FailedAuth from './views/FailedAuth.vue'
 
 /* Dashboard views */
 
-
 /* Axios */
-
 
 // import axios from 'axios';
 
+import i18n from './language/i18n'
 
-
-import i18n from './language/i18n';
-
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 export default function init(store) {
     console.log(i18n.messages[i18n.locale])
     return new VueRouter({
-        mode: "history",
+        mode: 'history',
         routes: [{
-                path: "/",
+                path: '/',
                 component: Home,
-                name: "Home",
+                name: 'Home'
             },
             {
-                path: "/dashboard/",
+                path: '/dashboard/',
                 component: Dashboard,
-                name: "dashboard",
+                name: 'dashboard',
                 children: [{
-                        path: ":id",
-                        component: Dashboard,
-                        name: "dashboard-children",
-                        beforeEnter(to, from, next) {
-                            store.commit("event/setGuildId", to.params.id)
-                            next();
-
-                        }
-                    },
-
-
-                ],
+                    path: ':id',
+                    component: Dashboard,
+                    name: 'dashboard-children',
+                    beforeEnter(to, from, next) {
+                        store.commit('event/setGuildId', to.params.id)
+                        next()
+                    }
+                }],
                 beforeEnter(to, from, next) {
                     if (!store.state.auth.user) return next('/failed-authorization')
                     return next()
                 }
             },
             {
-                path: "/failed-authorization",
+                path: '/failed-authorization',
                 component: FailedAuth,
-                name: "failed-authorization",
-
+                name: 'failed-authorization'
             },
             {
-                path: "/maintenance",
+                path: '/maintenance',
                 component: Maintenance,
-                name: "maintenance",
-
-            }, { path: "*", component: Fail, name: "404", }
-
+                name: 'maintenance'
+            },
+            { path: '*', component: Fail, name: '404' }
         ]
-    });
-
-
+    })
 }

@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 /*
     type: 0 --> log(kullanıcı bir komut yazmadan calısan komut),
@@ -11,73 +11,72 @@ const commandSchema = new Schema({
     name: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     shortName: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     fileName: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     description: {
         type: String,
-        required: true
+        required: true,
     },
     icon: {
-        type: String
+        type: String,
     },
     website: {
         active: {
             type: Boolean,
-            required: true
+            required: true,
         },
     },
     maintenance: {
         active: {
             type: Boolean,
-            required: true
+            required: true,
         },
         name: {
             type: String,
-            required: true
+            required: true,
         },
         description: {
             type: String,
-            required: true
+            required: true,
         },
     },
     updateLog: {
-        type: Array
+        type: Array,
     },
     type: {
         type: Number,
         enum: [0, 1],
-        required: true
+        required: true,
     },
     aliases: {
         type: Array,
-        unique: true
+        unique: true,
     },
     createdUser: {
         nickname: {
             type: String,
-            required: true
+            required: true,
         },
     },
     data: {
-        type: Object
+        type: Object,
     },
     categoryID: {
         type: Schema.ObjectId,
-        required: true
+        required: true,
     },
-
 }, {
-    timestamps: true
+    timestamps: true,
 })
 
-module.exports = mongoose.model("command", commandSchema)
+module.exports = mongoose.model('command', commandSchema)

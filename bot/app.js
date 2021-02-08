@@ -1,72 +1,70 @@
-require("dotenv").config()
-const io = require("socket.io-client");
-const socket = io("http://localhost:1111", { transports: ['websocket', 'polling', 'flashsocket'] });
-
-
+require('dotenv').config()
+const io = require('socket.io-client')
+const socket = io('http://localhost:1111', {
+    transports: ['websocket', 'polling', 'flashsocket'],
+})
 
 //command controller
-const Command = require("./crud/command/index");
+const Command = require('./crud/command/index');
 (async function() {
     await Command.controller()
-}())
+})()
 
 //discord bot created
-const Discord = require("discord.js");
+const Discord = require('discord.js')
 const client = new Discord.Client({
     ws: { intents: new Discord.Intents(Discord.Intents.ALL) },
-});
+})
 
 // ready
 /* Emitted when the client becomes ready to start working.    */
-client.on("ready", function() {
+client.on('ready', function() {
+    console.log('bot is ready')
 
-    console.log("bot is ready")
-
-    socket.on(`guildInformation`, (data) => {
-        console.log("serverinformation")
-        if ((!(data || data.length > 0))) socket.emit(`information`, { success: false, message: "Hiçbir data gelmedi." })
+    socket.on(`guildInformation`, data => {
+        console.log('serverinformation')
+        if (!(data || data.length > 0))
+            socket.emit(`information`, {
+                success: false,
+                message: 'Hiçbir data gelmedi.',
+            })
         if (data) {
             if (data.guilds && data.guilds.length > 0) {
-                const newGuilds = [];
+                const newGuilds = []
                 const notFoundServers = []
 
                 /*
-                    type 0 --> not found servers
-                    type 1 --> okey servers
-                    type 2 --> added servers
-                */
+                                    type 0 --> not found servers
+                                    type 1 --> okey servers
+                                    type 2 --> added servers
+                                */
 
-                data.guilds.forEach((d) => {
-                    const server = client.guilds.cache.find((server) => String(server.id) == String(d.id));
-                    if (!server)
-                        notFoundServers.push({...d, type: 0 });
+                data.guilds.forEach(d => {
+                    const server = client.guilds.cache.find(server => String(server.id) == String(d.id))
+                    if (!server) notFoundServers.push({...d, type: 0 })
                     if (server) {
-                        const user = server.members.cache.find((user) => user.id == data.id);
-                        if ((user) && (user.owner || user.permissions == process.env.GUILD_ADD_PERMISSION_ID))
+                        const user = server.members.cache.find(user => user.id == data.id)
+                        if (user && (user.owner || user.permissions == process.env.GUILD_ADD_PERMISSION_ID))
                             newGuilds.push({...d, type: 1 })
-
                     }
                 })
 
                 // console.log("sunucuda olmayan bütün botlar")
                 // console.log(notFoundServers)
 
-                notFoundServers.forEach((server) => {
-                    if (server.permissions == process.env.GUILD_ADD_PERMISSION_ID)
-                        newGuilds.push({...server, type: 2 })
-                    else
-                        newGuilds.push({...server, type: 0 })
+                notFoundServers.forEach(server => {
+                    if (server.permissions == process.env.GUILD_ADD_PERMISSION_ID) newGuilds.push({...server, type: 2 })
+                    else newGuilds.push({...server, type: 0 })
                 })
 
                 newGuilds.sort((a, b) => a.type - b.type)
 
-
                 socket.emit(`information`, {
-                    type: "setGuilds",
+                    type: 'setGuilds',
                     success: true,
                     _id: data._id,
                     payload: newGuilds,
-                    loading: { show: false, message: "Yönlendiriliyor.." }
+                    loading: { show: false, message: 'Yönlendiriliyor..' },
                 })
             }
         }
@@ -78,17 +76,18 @@ client.on("ready", function() {
     //     // Outputs the guild name + the invite URL
     // });
 
-    console.log(`the client becomes ready to start`);
-    console.log(`I am ready! Logged in as ${client.user.tag}!`);
-    console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`);
+    console.log(`the client becomes ready to start`)
+    console.log(`I am ready! Logged in as ${client.user.tag}!`)
+    console.log(
+        `Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`
+    )
 
-    client.user.setActivity("the upright organ");
-    client.generateInvite(['SEND_MESSAGES', 'MANAGE_GUILD', 'MENTION_EVERYONE'])
-        .then(link => {
-            console.log(`Generated bot invite link: ${link}`);
-            inviteLink = link;
-        });
-});
+    client.user.setActivity('the upright organ')
+    client.generateInvite(['SEND_MESSAGES', 'MANAGE_GUILD', 'MENTION_EVERYONE']).then(link => {
+        console.log(`Generated bot invite link: ${link}`)
+        inviteLink = link
+    })
+})
 
 // // debug
 // /* Emitted for general debugging information.
@@ -114,7 +113,6 @@ client.on("ready", function() {
 //     console.error(`client's WebSocket encountered a connection error: ${error}`);
 // });
 
-
 // // reconnecting
 // /* Emitted whenever the client tries to reconnect to the WebSocket.    */
 // client.on("reconnecting", function() {
@@ -130,7 +128,7 @@ client.on("ready", function() {
 // });
 
 // // warn
-// /* Emitted for general warnings. 
+// /* Emitted for general warnings.
 // PARAMETER    TYPE       DESCRIPTION
 // info         string     The warning   */
 // client.on("warn", function(info) {
@@ -187,10 +185,6 @@ client.on("ready", function() {
 //     console.log(`clientUserSettingsUpdate -> client user's settings update`);
 // });
 
-
-
-
-
 // // emojiCreate
 // /* Emitted whenever a custom emoji is created in a guild.
 // PARAMETER    TYPE          DESCRIPTION
@@ -215,8 +209,6 @@ client.on("ready", function() {
 // client.on("emojiUpdate", function(oldEmoji, newEmoji) {
 //     console.log(`a custom guild emoji is updated`);
 // });
-
-
 
 // // guildBanAdd
 // /* Emitted whenever a member is banned from a guild.
@@ -323,16 +315,16 @@ client.on("ready", function() {
 /* Emitted whenever a message is created.
 PARAMETER      TYPE           DESCRIPTION
 message        Message        The created message    */
-client.on("message", (message) => {
+client.on('message', message => {
     const payload = `${message.author.username} kullanıcısı ${message.channel.name} kanalına "${message.content}" yazdı.`
     socket.emit(`information`, {
-        type: "event/setGuildLogs",
+        type: 'event/setGuildLogs',
         id: message.guild.id,
         success: true,
         payload,
-        loading: { show: false, message: "Yönlendiriliyor.." }
+        loading: { show: false, message: 'Yönlendiriliyor..' },
     })
-});
+})
 
 // // messageDelete
 // /* Emitted whenever a message is deleted.
@@ -393,10 +385,6 @@ client.on("message", (message) => {
 // client.on("presenceUpdate", function(oldMember, newMember) {
 //     console.log(`a guild member's presence changes`);
 // });
-
-
-
-
 
 // // roleCreate
 // /* Emitted whenever a role is created.
@@ -469,4 +457,4 @@ client.on("message", (message) => {
 //     console.log(`a user changes voice state`);
 // });
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN)

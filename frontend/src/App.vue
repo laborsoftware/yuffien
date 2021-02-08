@@ -1,21 +1,21 @@
 <script>
-import {mapActions, mapState} from 'vuex'
-import Footer from './views/global/Footer'
+import { mapActions, mapState } from 'vuex'
+import Footer from './components/Footer'
 export default {
-  components:{
-    appFooter:Footer,
+  components: {
+    appFooter: Footer
   },
-  computed:{
-    ...mapState("auth",["user"]),
-    ...mapState("event",["loading"])
+  computed: {
+    ...mapState('auth', ['user']),
+    ...mapState('event', ['loading'])
   },
-  methods:{
-    ...mapActions("auth",["logout"])
+  methods: {
+    ...mapActions('auth', ['logout'])
   },
-  data(){
-    return({
+  data() {
+    return {
       redirectURL: process.env.VUE_APP_LOCAL_API_URL
-    })
+    }
   }
 }
 </script>
@@ -53,38 +53,37 @@ export default {
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap');
-@import 'public/assets/scss/global';
+@import 'assets/scss/global';
 
 * {
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   background-color: $thema-background-color;
 }
 
 .loading {
-   text-align: center;
-   background: rgba(0, 0, 0, 0.05);
-   border-radius: 4px;
-   margin-bottom: 20px;
-   padding: 30px 50px;
-   min-height: 100vh;
-   display: flex;
-   align-items: center;
-   justify-content: center;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  margin-bottom: 20px;
+  padding: 30px 50px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: $thema-background-color;
-
 }
-
 
 h1 {
   font-weight: 700 !important;
-  font-size:32px;
-  color:white;
+  font-size: 32px;
+  color: white;
 }
 
 #app {
@@ -102,25 +101,25 @@ h1 {
     padding-right: 2em;
     width: 100%;
     display: block;
-    color:$btn-color2;
+    color: $btn-color2;
   }
 }
 .ant-layout {
   min-height: 100vh;
-  color:white;
+  color: white;
 }
 
 .ant-layout-header {
-   // padding: 0 calc(calc(100% - 700px) / 2);
+  // padding: 0 calc(calc(100% - 700px) / 2);
   // padding:0 14px;
-  background:$thema-background-color  !important;
-  height:100%;
+  background: $thema-background-color !important;
+  height: 100%;
 }
 
 .ant-layout-content {
   align-self: center;
   padding: 4em;
-  background:$thema-background-color;
+  background: $thema-background-color;
   color: $text-color;
 
   @media (max-width: 576px) {
@@ -129,27 +128,23 @@ h1 {
   width: 100%;
 }
 
-
-.ant-menu-item-active{
-      border-bottom: 2px solid $btn-color;
+.ant-menu-item-active {
+  border-bottom: 2px solid $btn-color;
 }
 
-.ant-menu-item{
-      background:$thema-background-color;
-      color:white;
-      &:hover{
-        background-color:$thema-background-color !important;
-        border-bottom: 2px solid $btn-color !important;
-      }
-      a {
-        color:white !important
-      }
+.ant-menu-item {
+  background: $thema-background-color;
+  color: white;
+  &:hover {
+    background-color: $thema-background-color !important;
+    border-bottom: 2px solid $btn-color !important;
+  }
+  a {
+    color: white !important;
+  }
 }
 </style>
 
 <style lang="scss" scoped>
-@import 'public/assets/scss/global';
-
-
-
+@import 'assets/scss/global';
 </style>

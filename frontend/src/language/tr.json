@@ -30,8 +30,6 @@
         "logoutBtn": {
             "name": "Çıkış yap"
         }
-
-
     },
     "failed-authorization": {
         "title": "Başarısız Yetkilendirme",

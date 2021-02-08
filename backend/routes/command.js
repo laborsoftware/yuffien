@@ -1,13 +1,19 @@
 const express = require('express')
 const router = express.Router()
 
-const Command = require('../crud/Command')
+const Command = require('../models/Command')
 
-router.post('/add', async(req, res, next) => {
+router.post('/', async(req, res, next) => {
     const { command } = req.body
-    console.log('req.body', req.body)
-    const savedCommand = await Command.add(command)
-    res.json(savedCommand)
+
+    const newCommand = new Command(command)
+
+    try {
+        await newCommand.save()
+        return res.sendStatus(201)
+    } catch (error) {
+        return res.json(error.message)
+    }
 })
 
 module.exports = router

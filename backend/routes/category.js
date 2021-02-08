@@ -1,13 +1,18 @@
 const express = require('express')
 const router = express.Router()
 
-const Category = require('../crud/CommandCategory')
+const Category = require('../models/CommandCategory')
 
-router.post('/add', async(req, res, next) => {
+router.post('/', async(req, res, next) => {
     const { category } = req.body
-    console.log('req.body', req.body)
-    const savedCategory = await Category.add(category)
-    res.json(savedCategory)
+    const newCategory = new Category(category)
+
+    try {
+        await newCategory.save()
+        return res.sendStatus(201)
+    } catch (error) {
+        return res.json(error.message)
+    }
 })
 
 module.exports = router

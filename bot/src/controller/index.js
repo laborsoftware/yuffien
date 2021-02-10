@@ -1,7 +1,7 @@
 const slugify = require('slugify')
 const path = require('path')
 const fs = require('fs')
-const commandDirectory = '../../commands'
+const commandDirectory = '../commands'
 const axios = require('axios')
 axios.defaults.baseURL = process.env.API
 
@@ -14,7 +14,7 @@ module.exports.controller = async() => {
         delete command.execute
         command.shortName = slugify(command.name, '-').toLowerCase()
         command.createdTime = Date.now()
-        const savedCommand = await axios.post('/command/add', { command })
+        const savedCommand = await axios.post('/command/', { command })
         console.log(savedCommand.data)
     })
 }

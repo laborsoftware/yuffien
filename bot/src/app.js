@@ -1,11 +1,8 @@
 require('dotenv').config()
-const io = require('socket.io-client')
-const socket = io('http://localhost:1111', {
-    transports: ['websocket', 'polling', 'flashsocket'],
-})
+const socket = require('./socket-connection')
 
 //command controller
-const Command = require('./crud/command/index');
+const Command = require('./controller/index');
 (async function() {
     await Command.controller()
 })()
@@ -18,57 +15,8 @@ const client = new Discord.Client({
 
 // ready
 /* Emitted when the client becomes ready to start working.    */
-client.on('ready', function() {
-    console.log('bot is ready')
-
-    socket.on(`guildInformation`, data => {
-        console.log('serverinformation')
-        if (!(data || data.length > 0))
-            socket.emit(`information`, {
-                success: false,
-                message: 'Hiçbir data gelmedi.',
-            })
-        if (data) {
-            if (data.guilds && data.guilds.length > 0) {
-                const newGuilds = []
-                const notFoundServers = []
-
-                /*
-                                    type 0 --> not found servers
-                                    type 1 --> okey servers
-                                    type 2 --> added servers
-                                */
-
-                data.guilds.forEach(d => {
-                    const server = client.guilds.cache.find(server => String(server.id) == String(d.id))
-                    if (!server) notFoundServers.push({...d, type: 0 })
-                    if (server) {
-                        const user = server.members.cache.find(user => user.id == data.id)
-                        if (user && (user.owner || user.permissions == process.env.GUILD_ADD_PERMISSION_ID))
-                            newGuilds.push({...d, type: 1 })
-                    }
-                })
-
-                // console.log("sunucuda olmayan bütün botlar")
-                // console.log(notFoundServers)
-
-                notFoundServers.forEach(server => {
-                    if (server.permissions == process.env.GUILD_ADD_PERMISSION_ID) newGuilds.push({...server, type: 2 })
-                    else newGuilds.push({...server, type: 0 })
-                })
-
-                newGuilds.sort((a, b) => a.type - b.type)
-
-                socket.emit(`information`, {
-                    type: 'setGuilds',
-                    success: true,
-                    _id: data._id,
-                    payload: newGuilds,
-                    loading: { show: false, message: 'Yönlendiriliyor..' },
-                })
-            }
-        }
-    })
+client.on('ready', async() => {
+    await socket(client)
 
     // client.guilds.cache.forEach(guild => {
     //     guild.channels.cache.first().createInvite()
@@ -76,17 +24,17 @@ client.on('ready', function() {
     //     // Outputs the guild name + the invite URL
     // });
 
-    console.log(`the client becomes ready to start`)
-    console.log(`I am ready! Logged in as ${client.user.tag}!`)
+    // console.log(`the client becomes ready to start`)
+    // console.log(`I am ready! Logged in as ${client.user.tag}!`)
     console.log(
-        `Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`
+        `Bot has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds.`
     )
 
-    client.user.setActivity('the upright organ')
-    client.generateInvite(['SEND_MESSAGES', 'MANAGE_GUILD', 'MENTION_EVERYONE']).then(link => {
-        console.log(`Generated bot invite link: ${link}`)
-        inviteLink = link
-    })
+    // client.user.setActivity('the upright organ')
+    // client.generateInvite(['SEND_MESSAGES', 'MANAGE_GUILD', 'MENTION_EVERYONE']).then(link => {
+    //     console.log(`Generated bot invite link: ${link}`)
+    //     inviteLink = link
+    // })
 })
 
 // // debug
@@ -315,15 +263,9 @@ client.on('ready', function() {
 /* Emitted whenever a message is created.
 PARAMETER      TYPE           DESCRIPTION
 message        Message        The created message    */
+const eventMessage = require('./events/message')
 client.on('message', message => {
-    const payload = `${message.author.username} kullanıcısı ${message.channel.name} kanalına "${message.content}" yazdı.`
-    socket.emit(`information`, {
-        type: 'event/setGuildLogs',
-        id: message.guild.id,
-        success: true,
-        payload,
-        loading: { show: false, message: 'Yönlendiriliyor..' },
-    })
+    eventMessage(message)
 })
 
 // // messageDelete

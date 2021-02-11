@@ -1,27 +1,29 @@
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import GuildsList from '../../components/dashboard/GuildsList'
-import Home from '../../components/dashboard/Home'
+import CategoryList from '../../components/dashboard/CategoryList'
+import PageHeader from '../../components/dashboard/PageHeader'
 export default {
   computed: {
-    ...mapState('event', ['guildId'])
+    ...mapState('event', ['currentGuild'])
   },
-  methods: {
-    ...mapActions('auth', ['login', 'checkGuilds'])
-  },
+
   components: {
     appGuildsList: GuildsList,
-    appHome: Home
-  },
-  async created() {
-    await this.login()
-    await this.checkGuilds()
+    appCategoryList: CategoryList,
+    appPageHeader: PageHeader
   }
 }
 </script>
 
 <template lang="pug">
+
 #dashboard
-  app-guilds-list(v-if="!guildId")
-  app-home(v-if="guildId")
+  div(v-if="!currentGuild")
+    app-guilds-list
+
+  div(v-else)
+    app-page-header
+    app-category-list
+
 </template>

@@ -9,7 +9,6 @@ module.exports = client => {
     })
 
     socket.on(`guildInformation`, data => {
-        console.log('serverinformation')
         if (!(data || data.length > 0))
             socket.emit(`information`, {
                 success: false,
@@ -20,27 +19,23 @@ module.exports = client => {
                 const newGuilds = []
                 const notFoundServers = []
 
-                /*
-                                                                type 0 --> not found servers
-                                                                type 1 --> okey servers
-                                                                type 2 --> okey servers but not permission
-                                                                type 3 --> added servers
-
-                                                                                                                                                                                                                                                                        */
+                //type 0 --> not found servers
+                //type 1 --> okey servers
+                //type 2 --> okey servers but not permission
+                //type 3 --> added servers
 
                 data.guilds.forEach(d => {
                     const server = client.guilds.cache.find(server => String(server.id) == String(d.id))
                     if (!server) notFoundServers.push({...d, type: 0 })
                     if (server) {
                         const user = server.members.cache.find(user => user.id == data.id)
-                        if (user && (user.owner || user.permissions == process.env.GUILD_ADD_PERMISSION_ID)) {
+                        if (user && user.hasPermission('ADMINISTRATOR')) {
                             const members = server.members.cache
                             allCount = members.size
                             onlineCount = members.filter(member => member.presence.status != 'offline' && !member.user.bot).size
                             offlineCount = members.filter(member => member.presence.status == 'offline' && !member.user.bot).size
                             botCount = members.filter(member => member.user.bot).size
 
-                            console.log(onlineCount)
                             newGuilds.push({
                                 ...d,
                                 type: 1,
@@ -71,7 +66,46 @@ module.exports = client => {
                     success: true,
                     _id: data._id,
                     payload: newGuilds,
-                    loading: { show: false, message: 'Yönlendiriliyor..' },
+                    loading: { show: false },
+                })
+            }
+        }
+    })
+
+    socket.on(`guildCheck`, data => {
+        const server = client.guilds.cache.find(server => String(server.id) == String(data.guildId))
+        if (!server)
+            return socket.emit(`information`, {
+                type: 'event/setCurrentGuild',
+                id: data._id,
+                payload: false,
+                loading: { show: true, message: 'Böyle bir sunucu bulunamadı.' },
+            })
+        else {
+            const member = server.members.cache.find(member => String(member.id) == String(data.userId))
+            if (!member)
+                return socket.emit(`information`, {
+                    type: 'event/setCurrentGuild',
+                    payload: false,
+                    id: data._id,
+                    loading: { show: true, message: 'Bu sunucuya kayıtlı değilsiniz.' },
+                })
+            else {
+                if (!member.hasPermission('ADMINISTRATOR'))
+                    return socket.emit(`information`, {
+                        type: 'event/setCurrentGuild',
+                        payload: false,
+                        id: data._id,
+                        loading: { show: true, message: 'Bu sunucuyu yönetme yetkiniz yok.' },
+                    })
+
+                return socket.emit(`information`, {
+                    type: 'event/setCurrentGuild',
+                    payload: server,
+                    id: data._id,
+                    guildId: server.id,
+
+                    loading: { show: false },
                 })
             }
         }

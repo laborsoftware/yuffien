@@ -26,6 +26,10 @@ const userSchema = new Schema({
         type: Array,
         required: true,
     },
+    avatar: {
+        type: String,
+        required: true,
+    },
 }, { timestamps: true })
 
 module.exports = mongoose.model('user', userSchema)

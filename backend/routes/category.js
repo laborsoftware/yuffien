@@ -5,15 +5,20 @@ const Category = require('../models/Category')
 
 router.get('/', async(req, res, next) => {
     try {
-        return res.json(await Category.find())
+        const Categories = await Category.aggregate([{
+            $lookup: { from: 'commands', localField: '_id', foreignField: 'categoryID', as: 'commands' },
+        }, ])
+
+        res.json(Categories)
     } catch (error) {
-        return res.json(error.message)
+        res.json(error.message)
     }
 })
 
 router.post('/', async(req, res, next) => {
-    const { category } = req.body
-    const newCategory = new Category(category)
+    const { name, description } = req.body
+    console.log(req.body)
+    const newCategory = new Category({ name, description })
 
     try {
         await newCategory.save()

@@ -3,7 +3,7 @@ import { mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapState('auth', ['guilds'])
+    ...mapState('event', ['guilds'])
   }
 }
 </script>
@@ -33,15 +33,18 @@ a-row(type="flex", justify="center", :gutter="[50, 30]")
       .body
         h4
           | {{ guild.name }}
+        p(v-if="guild.members") {{guild.members.allCount}} üye({{guild.members.onlineCount}} aktif, {{guild.members.offlineCount}} deaktif, {{guild.members.botCount}} bot.)
     .buttons
       router-link(:to="`/dashboard/${guild.id}`", v-if="guild.type == 1")
         a-button.go-panel(type="primary", icon="setting") Yönetim paneli
+
+      a-button.go-panel.unauthorized(type="primary", icon="setting" v-if="guild.type == 2") Yönetim paneli
       a-button.add-server(
         ghost,
         icon="plus-circle",
         target="_blank",
         :href="`https://discord.com/oauth2/authorize?client_id=792357940383842314&permissions=8&guild_id=${guild.id}&scope=bot`",
-        v-if="guild.type == 2"
+        v-if="guild.type == 3"
       ) Sunucuya ekle
 </template>
 
@@ -77,6 +80,11 @@ h1 {
       background: $btn-color2;
       &:hover {
         background: $btn-color2-hover;
+      }
+    }
+    .unauthorized {
+      &:hover {
+        cursor: not-allowed;
       }
     }
     .add-server {

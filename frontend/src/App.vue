@@ -1,21 +1,14 @@
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import Footer from './components/Footer'
+import Header from './components/Header'
 export default {
   components: {
-    appFooter: Footer
+    appFooter: Footer,
+    appHeader: Header
   },
   computed: {
-    ...mapState('auth', ['user']),
     ...mapState('event', ['loading'])
-  },
-  methods: {
-    ...mapActions('auth', ['logout'])
-  },
-  data() {
-    return {
-      redirectURL: process.env.VUE_APP_LOCAL_API_URL
-    }
   }
 }
 </script>
@@ -25,23 +18,7 @@ export default {
       a-spin(:tip="loading.message")
     a-layout#components-layout-demo-top.layout(theme='light' v-show = "!loading.show")
       a-layout-header
-        a-row(type="flex" justify="space-between")
-          a-col
-            div.logo
-              router-link(to="/") Yuffie.
-          a-col
-            a-menu(mode='horizontal' :style={lineHeight:"63px"})
-              a-menu-item(key="oneri" icon="oneri")
-                a(href="#")
-                  a-icon(type="alert")
-                  | {{ this.$t('home.ticket') }}
-              a-menu-item(v-if="!user" key="github" icon="github")
-                a( :href="redirectURL + $t('home.loginBtn.url')")
-                  a-icon(type="login")
-                  | {{ this.$t('home.loginBtn.name') }}
-              a-menu-item(v-if="user" key="logout" icon="logout")
-                a(@click="logout")
-                  | {{ this.$t('home.logoutBtn.name') }}
+        app-header
               
                 
       a-layout-content

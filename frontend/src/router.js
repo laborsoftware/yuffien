@@ -8,18 +8,11 @@ import Maintenance from './views/Maintenance.vue'
 import Fail from './views/404.vue'
 import FailedAuth from './views/FailedAuth.vue'
 
-/* Dashboard views */
-
-/* Axios */
-
-// import axios from 'axios';
-
-import i18n from './language/i18n'
+// import i18n from './language/i18n'
 
 Vue.use(VueRouter)
 
 export default function init(store) {
-    console.log(i18n.messages[i18n.locale])
     return new VueRouter({
         mode: 'history',
         routes: [{
@@ -36,13 +29,17 @@ export default function init(store) {
                     component: Dashboard,
                     name: 'dashboard-children',
                     beforeEnter(to, from, next) {
-                        store.commit('event/setGuildId', to.params.id)
+                        store.dispatch('event/checkGuild', to.params.id)
                         next()
                     }
                 }],
                 beforeEnter(to, from, next) {
+                    store.commit('event/setCurrentGuild', null)
                     if (!store.state.auth.user) return next('/failed-authorization')
-                    return next()
+                    else {
+                        store.dispatch('event/getGuilds')
+                        next()
+                    }
                 }
             },
             {

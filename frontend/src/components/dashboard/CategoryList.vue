@@ -1,16 +1,21 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
-
+import moment from 'moment'
 export default {
   computed: {
     ...mapGetters('event', ['guildLogs']),
     ...mapState('event', ['categories'])
   },
   methods: {
-    ...mapActions('event', ['category'])
+    ...mapActions('event', ['getCategories'])
   },
   created() {
-    this.category()
+    this.getCategories()
+  },
+  data() {
+    return {
+      moment
+    }
   }
 }
 </script>
@@ -29,7 +34,12 @@ export default {
       a-col(:span="24")
         h1 Kategoriler
       a-col#log(:span="8" v-for = "category in categories" :key="category._id")
-        a-card(:title="`${category.name}`" description = 'hello world' :bordered="false")
+        a-card(:title="`${category.name}`" :bordered="false")
+          ul
+            li(v-for = "command in category.commands")
+              h3 {{ command.name }}
+              p {{ command.description }}
+              p {{ moment(command.updatedAt).locale("tr").fromNow() }}, {{ command.createdUser.nickname }} tarafından oluşturuldu.
             //- a-affix
             //-     a-card(title="Sunucumda neler oluyor?"  :bordered="false")
             //-         ul(v-for = "log in guildLogs")

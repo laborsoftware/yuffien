@@ -41,7 +41,8 @@ import {
     message,
     Divider,
     Result,
-    Affix
+    Affix,
+    Timeline
 } from 'ant-design-vue'
 
 const components = [
@@ -68,7 +69,8 @@ const components = [
     Dropdown,
     Divider,
     Result,
-    Affix
+    Affix,
+    Timeline
 ]
 
 Vue.prototype.$message = message

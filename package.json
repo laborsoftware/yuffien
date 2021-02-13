@@ -1,0 +1,21 @@
+{
+    "name": "yuffien",
+    "version": "1.0.0",
+    "description": "open-source discord bot",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "concurrently \"cd ./backend & npm run dev\" \"cd ./frontend & npm run serve\" \"cd ./bot & npm run dev\" "
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/laborsoftware/yuffien.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/laborsoftware/yuffien/issues"
+    },
+    "homepage": "https://github.com/laborsoftware/yuffien#readme"
+}

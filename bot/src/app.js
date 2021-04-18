@@ -1,49 +1,156 @@
 require('dotenv').config()
 const socket = require('./socket-connection')
+const axios = require('axios')
+axios.defaults.baseURL = process.env.API
+
+const messageSchema = require('./models/messages')
 
 //command controller
-const Command = require('./controller/index');
-(async function() {
-    await Command.controller()
+const Command = require('./controller/index')
+;(async function () {
+  await Command.controller()
 })()
 
 //discord bot created
 const Discord = require('discord.js')
-const client = new Discord.Client({
-    ws: { intents: new Discord.Intents(Discord.Intents.ALL) },
-})
+const client = new Discord.Client()
+
+//
+// const interactions = require('discord-slash-commands-client')
+// client.interactions = new interactions.Client(process.env.DISCORD_TOKEN, process.env.CLIENT_ID)
 
 // ready
 /* Emitted when the client becomes ready to start working.    */
-client.on('ready', async() => {
-    await socket(client)
 
-    // client.guilds.cache.forEach(guild => {
-    //     guild.channels.cache.first().createInvite()
-    //         .then(inv => console.log(`${guild.name} | ${inv.url}`));
-    //     // Outputs the guild name + the invite URL
-    // });
+client.on('ready', async () => {
+  // await socket(client)
 
-    // console.log(`the client becomes ready to start`)
-    // console.log(`I am ready! Logged in as ${client.user.tag}!`)
-    console.log(
-        `Bot has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds.`
-    )
+  // client.interactions
+  //     .createCommand({
+  //             name: 'permissions',
+  //             description: 'Get or edit permissions for a user or a role',
+  //             options: [{
+  //                     name: 'user',
+  //                     description: 'Get or edit permissions for a user',
+  //                     type: 2, // 2 is type SUB_COMMAND_GROUP
+  //                     options: [{
+  //                             name: 'get',
+  //                             description: 'Get permissions for a user',
+  //                             type: 1, // 1 is type SUB_COMMAND
+  //                             options: [{
+  //                                     name: 'user',
+  //                                     description: 'The user to get',
+  //                                     type: 6, // 6 is type USER
+  //                                     required: true,
+  //                                 },
+  //                                 {
+  //                                     name: 'channel',
+  //                                     description: 'The channel permissions to get. If omitted, the guild permissions will be returned',
+  //                                     type: 7, // 7 is type CHANNEL
+  //                                     required: false,
+  //                                 },
+  //                             ],
+  //                         },
+  //                         {
+  //                             name: 'edit',
+  //                             description: 'Edit permissions for a user',
+  //                             type: 1,
+  //                             options: [{
+  //                                     name: 'user',
+  //                                     description: 'The user to edit',
+  //                                     type: 6,
+  //                                     required: true,
+  //                                 },
+  //                                 {
+  //                                     name: 'channel',
+  //                                     description: 'The channel permissions to edit. If omitted, the guild permissions will be edited',
+  //                                     type: 7,
+  //                                     required: false,
+  //                                 },
+  //                             ],
+  //                         },
+  //                     ],
+  //                 },
+  //                 {
+  //                     name: 'role',
+  //                     description: 'Get or edit permissions for a role',
+  //                     type: 2,
+  //                     options: [{
+  //                             name: 'get',
+  //                             description: 'Get permissions for a role',
+  //                             type: 1,
+  //                             options: [{
+  //                                     name: 'role',
+  //                                     description: 'The role to get',
+  //                                     type: 8, // 8 is type ROLE
+  //                                     required: true,
+  //                                 },
+  //                                 {
+  //                                     name: 'channel',
+  //                                     description: 'The channel permissions to get. If omitted, the guild permissions will be returned',
+  //                                     type: 7,
+  //                                     required: false,
+  //                                 },
+  //                             ],
+  //                         },
+  //                         {
+  //                             name: 'edit',
+  //                             description: 'Edit permissions for a role',
+  //                             type: 1,
+  //                             options: [{
+  //                                     name: 'role',
+  //                                     description: 'The role to edit',
+  //                                     type: 8,
+  //                                     required: true,
+  //                                 },
+  //                                 {
+  //                                     name: 'channel',
+  //                                     description: 'The channel permissions to edit. If omitted, the guild permissions will be edited',
+  //                                     type: 7,
+  //                                     required: false,
+  //                                 },
+  //                             ],
+  //                         },
+  //                     ],
+  //                 },
+  //             ],
+  //         },
+  //         '775659493543247912'
+  //     )
+  //     .then(console.log)
+  //     .catch(console.error)
 
-    // client.user.setActivity('the upright organ')
-    // client.generateInvite(['SEND_MESSAGES', 'MANAGE_GUILD', 'MENTION_EVERYONE']).then(link => {
-    //     console.log(`Generated bot invite link: ${link}`)
-    //     inviteLink = link
-    // })
+  // attach and event listener for the interactionCreate event
+
+  // const myChannel = client.channels.cache.find(channel => channel.id == 769526790141509642)
+  // await myChannel.send(await messageSchema.welcome())
+
+  // client.guilds.cache.forEach(guild => {
+  //     guild.channels.cache.first().createInvite()
+  //         .then(inv => console.log(`${guild.name} | ${inv.url}`));
+  //     // Outputs the guild name + the invite URL
+  // });
+
+  // console.log(`the client becomes ready to start`)
+  // console.log(`I am ready! Logged in as ${client.user.tag}!`)
+  console.log(
+    `Bot has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds.`
+  )
+
+  client.user.setActivity('the upright organ')
+  // client.user.setActivity(
+  //         `with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds.`
+  //     )
+  //     // client.generateInvite(['SEND_MESSAGES', 'MANAGE_GUILD', 'MENTION_EVERYONE']).then(link => {
+  //     console.log(`Generated bot invite link: ${link}`)
+  //     inviteLink = link
+  // })
 })
 
-// // debug
-// /* Emitted for general debugging information.
-// PARAMETER    TYPE         DESCRIPTION
-// info         string       The debug information    */
-// client.on("debug", function(info) {
-//     console.log(`debug -> ${info}`);
-// });
+// client.ws.on('INTERACTION_CREATE', interaction => {
+//     const channel = client.channels.cache.find(a => a.id == interaction.channel_id)
+//     channel.send('sa')
+// })
 
 // // disconnect
 // /* Emitted when the client's WebSocket disconnects and will no longer attempt to reconnect.
@@ -264,8 +371,18 @@ client.on('ready', async() => {
 PARAMETER      TYPE           DESCRIPTION
 message        Message        The created message    */
 const eventMessage = require('./events/message')
-client.on('message', message => {
-    eventMessage(message)
+
+client.on('message', async message => {
+  if (message.channel.id == '775659495547994134')
+    if (message.author.bot || message.content.startsWith('!p')) message.delete()
+  if (message.channel.id == '803256282789314600') if (!message.author.bot) message.delete()
+
+  // const response = await axios.get(`/guild-options/${message.guild.id}`)
+  // const prefix = response.data.options.prefix.value || 'n!'
+  // console.log(prefix)
+  // const isPrefixStart = message.content.startsWith(prefix)
+  // if (isPrefixStart) message.reply(JSON.stringify(response.data, 2, null))
+  // eventMessage(message)
 })
 
 // // messageDelete
@@ -399,4 +516,4 @@ client.on('message', message => {
 //     console.log(`a user changes voice state`);
 // });
 
-client.login(process.env.DISCORD_TOKEN)
+client.login('NzkyMzU3OTQwMzgzODQyMzE0.X-ci1g.9vUkEpDCSUo6eCzcR0Tm3LXu7pg')

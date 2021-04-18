@@ -1,5 +1,3 @@
-const MessageEmbed = require('discord.js').MessageEmbed
-
 module.exports = {
     name: 'Hoşgeldin Mesajı',
     aliases: ['hg'],
@@ -8,7 +6,8 @@ module.exports = {
     usage: '',
     active: true,
     website: {
-        active: false,
+        active: true,
+        component: 'app-welcome-command',
     },
     maintenance: {
         active: false,
@@ -16,9 +15,6 @@ module.exports = {
         description: 'bakım',
     },
     type: 0,
-    createdUser: {
-        nickname: 'tolgaand',
-    },
-    categoryID: '601ed99850cd0f362c2f3dc7',
+    authorsID: ['602ab08e7a55804fb748a4cc'],
     async execute() {},
 }

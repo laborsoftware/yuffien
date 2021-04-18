@@ -12,8 +12,10 @@
     "license": "ISC",
     "dependencies": {
         "axios": "^0.21.1",
+        "discord-slash-commands-client": "^1.1.1",
         "discord.js": "^12.5.1",
         "dotenv": "^8.2.0",
+        "progress": "^2.0.3",
         "slugify": "^1.4.6",
         "socket.io-client": "^3.1.0"
     }

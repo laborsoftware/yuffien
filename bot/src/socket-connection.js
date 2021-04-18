@@ -1,6 +1,32 @@
 const io = require('socket.io-client')
 let socket = null
 
+const getMemberCount = (client, id) => {
+    const server = client.guilds.cache.find(server => String(server.id) == String(id))
+    if (!server) return
+    const members = server.members.cache
+    const data = [
+        // {
+        //     item: 'Toplam',
+        //     count: members.size,
+        // },
+        {
+            item: 'Online',
+            count: members.filter(member => member.presence.status != 'offline' && !member.user.bot).size,
+        },
+        {
+            item: 'Offline',
+            count: members.filter(member => member.presence.status == 'offline' && !member.user.bot).size,
+        },
+        {
+            item: 'Bot',
+            count: members.filter(member => member.user.bot).size,
+        },
+    ]
+    console.log(server.name, data)
+    return data
+}
+
 module.exports = client => {
     if (socket) return socket
 
@@ -30,21 +56,9 @@ module.exports = client => {
                     if (server) {
                         const user = server.members.cache.find(user => user.id == data.id)
                         if (user && user.hasPermission('ADMINISTRATOR')) {
-                            const members = server.members.cache
-                            allCount = members.size
-                            onlineCount = members.filter(member => member.presence.status != 'offline' && !member.user.bot).size
-                            offlineCount = members.filter(member => member.presence.status == 'offline' && !member.user.bot).size
-                            botCount = members.filter(member => member.user.bot).size
-
                             newGuilds.push({
                                 ...d,
                                 type: 1,
-                                members: {
-                                    allCount,
-                                    onlineCount,
-                                    offlineCount,
-                                    botCount,
-                                },
                             })
                         } else
                             newGuilds.push({
@@ -74,6 +88,7 @@ module.exports = client => {
 
     socket.on(`guildCheck`, data => {
         const server = client.guilds.cache.find(server => String(server.id) == String(data.guildId))
+        console.log(data)
         if (!server)
             return socket.emit(`information`, {
                 type: 'event/setCurrentGuild',
@@ -98,17 +113,28 @@ module.exports = client => {
                         id: data._id,
                         loading: { show: true, message: 'Bu sunucuyu yönetme yetkiniz yok.' },
                     })
-
-                return socket.emit(`information`, {
+                const members = getMemberCount(client, server.id)
+                socket.emit(`information`, {
                     type: 'event/setCurrentGuild',
-                    payload: server,
+                    payload: {...server, members },
                     id: data._id,
                     guildId: server.id,
-
                     loading: { show: false },
                 })
             }
         }
+    })
+
+    socket.on(`botUpdateData`, data => {
+        data.forEach(id => {
+            const members = getMemberCount(client, id)
+            socket.emit('information', {
+                type: 'event/setGuildActiveStatus',
+                id,
+                payload: members,
+                loading: { show: true, message: '' },
+            })
+        })
     })
 
     return socket
